@@ -37,7 +37,7 @@ jobs:
       DB_NAME:       test_dsii_ecommerce
       DB_USER:       testuser
       PASSWORD:   testpass
-      DATABASE_HOST:       postgres
+      DATABASE_HOST: dpg-d0lkb6odl3ps73fnn5j0-a.oregon-postgres.render.com
       DATABASE_PORT:       5432
       SONAR_TOKEN:          ${{ secrets.SONAR_TOKEN }}
 
