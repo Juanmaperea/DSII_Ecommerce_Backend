@@ -63,25 +63,25 @@ jobs:
       # Backend - Django + Pytest
       - name: Install Python dependencies
         run: |
-          cd backend
+          cd EcommerceBackend
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pytest pytest-django coverage
 
       - name: Run Django tests with coverage
         run: |
-          cd backend
+          cd EcommerceBackend
           pytest --reuse-db
 
       # Frontend - React + Vite + Jest
       - name: Install frontend dependencies
         run: |
-          cd frontend
+          cd EcommerceFrontend
           npm install
 
       #- name: Run frontend tests with coverage
         #run: |
-          #cd frontend
+          #cd EcommerceFrontend
           #npm run test -- --coverage --coverageReporters=lcov
 
       # SonarCloud
