@@ -37,7 +37,7 @@ jobs:
       DB_NAME:       testdb
       DB_USER:       testuser
       PASSWORD:   testpass
-      DATABASE_HOST:       portgres
+      DATABASE_HOST:       postgres
       DATABASE_PORT:       5432
       SONAR_TOKEN:          ${{ secrets.SONAR_TOKEN }}
 
