@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
-import dj_database_url
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -90,9 +89,17 @@ if DEBUG:
     ALLOWED_HOSTS += ["localhost", "127.0.0.1"]
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL')
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get("DB_NAME", ""),
+        'USER': os.environ.get("DB_USER", ""),
+        'PASSWORD': os.environ.get("PASSWORD", ""),
+        'HOST': os.environ.get("DATABASE_HOST", ""),  # o el host de tu servidor de PostgreSQL
+        'PORT': os.environ.get("DATABASE_PORT", "5432"),      # el puerto predeterminado de PostgreSQL
+        'OPTIONS': {
+            'sslmode': 'require',  # Obliga el uso de SSL
+        },
+    }
 }
 
 print('NAME:', os.environ.get("DB_NAME", ""))
