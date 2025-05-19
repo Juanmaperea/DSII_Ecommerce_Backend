@@ -17,33 +17,10 @@ jobs:
     name: Test & Analyze
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_USER: testuser
-          POSTGRES_PASSWORD: testpass
-          POSTGRES_DB: testdb
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     env:
       DJANGO_SETTINGS_MODULE: EcommerceBackend.settings
-      DB_NAME:       test_dsii_ecommerce
-      DB_USER:       testuser
-      PASSWORD:   testpass
-      DATABASE_HOST:       postgres
-      DATABASE_PORT:       5432
-      SONAR_TOKEN:          ${{ secrets.SONAR_TOKEN }}
-
-    defaults:
-      run:
-        shell: bash
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
     steps:
       - name: Checkout repository
@@ -56,23 +33,17 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      # Backend - Django + Pytest
       - name: Install Python dependencies
         run: |
           cd EcommerceBackend
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pytest pytest-django coverage
+          pip install dj-database-url pytest pytest-django coverage
 
       - name: Run Django tests with coverage
         run: |
           cd EcommerceBackend
-          pytest --reuse-db 
+          pytest --reuse-db
 
       # Frontend - React + Vite + Jest
       - name: Install frontend dependencies
