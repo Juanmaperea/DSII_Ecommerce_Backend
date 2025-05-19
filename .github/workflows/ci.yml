@@ -71,7 +71,7 @@ jobs:
       - name: Run Django tests with coverage
         run: |
           cd EcommerceBackend
-          pytest --reuse-db
+          pytest
 
       # Frontend - React + Vite + Jest
       - name: Install frontend dependencies
