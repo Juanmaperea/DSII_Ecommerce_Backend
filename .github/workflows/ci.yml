@@ -19,7 +19,7 @@ jobs:
 
     env:
       DJANGO_SETTINGS_MODULE: EcommerceBackend.settings
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DATABASE_URL: ${{ secrets.DATABASE_POSTGRESQL }}
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
     steps:
