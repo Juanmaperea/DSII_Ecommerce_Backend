@@ -32,11 +32,11 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     env:
-      DJANGO_DB_NAME: testdb
-      DJANGO_DB_USER: testuser
-      DJANGO_DB_PASSWORD: testpass
-      DJANGO_DB_HOST: localhost
-      DJANGO_DB_PORT: 5432
+      DB_NAME: testdb
+      DB_USER: testuser
+      PASSWORD: testpass
+      DATABASE_HOST: localhost
+      DATABASE_PORT: 5432
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
     defaults:
