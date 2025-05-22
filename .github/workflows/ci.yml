@@ -1,0 +1,89 @@
+name: CI + SonarCloud
+
+on:
+  push:
+    branches: 
+      - main
+      - master
+      - develop
+  pull_request:
+    branches:
+      - main
+      - master
+      - develop
+
+jobs:
+  test-and-sonar:
+    name: Test & Analyze
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpass
+          POSTGRES_DB: testdb
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DJANGO_DB_NAME: testdb
+      DJANGO_DB_USER: testuser
+      DJANGO_DB_PASSWORD: testpass
+      DJANGO_DB_HOST: localhost
+      DJANGO_DB_PORT: 5432
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      # Backend - Django + Pytest
+      - name: Install Python dependencies
+        run: |
+          cd EcommerceBackend
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-django coverage
+      - name: Run Django tests with coverage
+        run: |
+          cd EcommerceBackend
+          pytest --reuse-db
+      # Frontend - React + Vite + Jest
+      - name: Install frontend dependencies
+        run: |
+          cd EcommerceFrontend
+          npm install
+      #- name: Run frontend tests with coverage
+        #run: |
+          #cd EcommerceFrontend
+          #npm run test -- --coverage --coverageReporters=lcov
+
+      # SonarCloud
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          projectBaseDir: .
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
