@@ -96,9 +96,6 @@ DATABASES = {
         'PASSWORD': os.environ.get("PASSWORD", ""),
         'HOST': os.environ.get("DATABASE_HOST", ""),  # o el host de tu servidor de PostgreSQL
         'PORT': os.environ.get("DATABASE_PORT", "5432"),      # el puerto predeterminado de PostgreSQL
-        'OPTIONS': {
-            'sslmode': 'require',  # Obliga el uso de SSL
-        },
     }
 }
 
