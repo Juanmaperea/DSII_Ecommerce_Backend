@@ -37,7 +37,6 @@ jobs:
       PASSWORD: testpass
       DATABASE_HOST: localhost
       DATABASE_PORT: 5432
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
     defaults:
       run:
