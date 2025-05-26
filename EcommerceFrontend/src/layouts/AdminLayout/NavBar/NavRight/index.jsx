@@ -1,46 +1,134 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 
-// react-bootstrap
-import { ListGroup, Dropdown, Card } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom'; // Importar useNavigate
 
-// third party
+import { ListGroup, Dropdown, Card, Modal, Button, Form } from 'react-bootstrap';
+
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
-// project import
-import ChatList from './ChatList';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-// assets
-import avatar1 from '../../../../assets/images/user/avatar-1.jpg';
-import avatar2 from '../../../../assets/images/user/avatar-2.jpg';
-import avatar3 from '../../../../assets/images/user/avatar-3.jpg';
-import avatar4 from '../../../../assets/images/user/avatar-4.jpg';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+
+import axiosInstance from '../../../../utils/axios';
 
 // ==============================|| NAV RIGHT ||============================== //
 
 const NavRight = () => {
-  const [listOpen, setListOpen] = useState(false);
+
+  const [userData, setUserData] = useState({ name: '' });
+
+
+  // Estado para manejar el modal de configuraciones
+
+  const [showSettings, setShowSettings] = useState(false);
+
+  const [settings, setSettings] = useState({
+
+    notifications: true,
+    darkMode: false,
+    publicProfile: false,
+  });
+
+  const navigate = useNavigate(); // Inicializar useNavigate
+
+  useEffect(() => {
+
+    // Hacer la solicitud a la API para obtener los datos del usuario
+
+    axiosInstance.get('/users/comprador/')
+
+      .then(response => {
+
+        // Guardar el nombre del usuario en el estado
+
+        setUserData({ name: response.data.user.username });
+
+      })
+
+      .catch(error => {
+
+        console.error('Error fetching user data:', error);
+
+      });
+
+  }, []);
+
+  const toggleSettingsModal = () => {
+    setShowSettings(!showSettings);
+  }; 
+
+
+const handleLogout = async () => {
+  try {
+    // Retrieve the token from localStorage
+    const token = localStorage.getItem('accessToken');
+
+    if (!token) {
+      // If no token, proceed to clear localStorage and redirect
+      localStorage.clear();
+      navigate('/auth/login-1');
+      return;
+    }
+
+    // Send POST request to logout endpoint with Authorization header
+    const response = await axiosInstance.post('/users/logout/', {}, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Ensure the token is properly attached
+      }
+    });
+
+    // Log the response for debugging purposes
+    console.log('Logout response:', response);
+
+    // Clear tokens and redirect after successful logout
+    
+    navigate('/auth/login-1');  // Redirect to login page after logout
+
+  } catch (error) {
+    console.error('Error during logout:', error);
+
+    // Log the error response data for troubleshooting
+    if (error.response) {
+      console.log('Error response data:', error.response.data);
+      console.log('Error response status:', error.response.status);
+    }
+
+    // Handle failure (e.g., clear localStorage and redirect)
+    localStorage.clear();
+    navigate('/auth/login-1');
+  }
+};
+
+
+  const handleSettingsChange = (event) => {
+    const { name, checked } = event.target;
+
+    setSettings({
+      ...settings,
+      [name]: checked,
+    });
+
+  };
+
+
 
   const notiData = [
-    {
-      name: 'Joseph William',
-      image: avatar2,
-      details: 'Purchase New Theme and make payment',
-      activity: '30 min'
-    },
-    {
-      name: 'Sara Soudein',
-      image: avatar3,
-      details: 'currently login',
-      activity: '30 min'
-    },
-    {
-      name: 'Suzen',
-      image: avatar4,
-      details: 'Purchase New Theme and make payment',
-      activity: 'yesterday'
-    }
+
+    { name: 'Joseph William', details: 'Purchase New Theme and make payment', activity: '30 min', },
+
+    { name: 'Sara Soudein', details: 'currently login', activity: '30 min',},
+
+    { name: 'Suzen', details: 'Purchase New Theme and make payment', activity: 'yesterday', },
+
   ];
+
+
+  // Función para redirigir a "/usuario"
+  const redirectToProfile = () => {
+    navigate('/usuario'); // Navega a la ruta "/usuario"
+  };
+
 
   return (
     <React.Fragment>
@@ -75,7 +163,7 @@ const NavRight = () => {
                       className="d-flex align-items-center shadow-none mb-0 p-0"
                       style={{ flexDirection: 'row', backgroundColor: 'unset' }}
                     >
-                      <img className="img-radius" src={avatar1} alt="Generic placeholder" />
+                     <FontAwesomeIcon icon={faUser} className="img-radius" />
                       <Card.Body className="p-0">
                         <p>
                           <strong>John Doe</strong>
@@ -98,7 +186,7 @@ const NavRight = () => {
                           className="d-flex align-items-center shadow-none mb-0 p-0"
                           style={{ flexDirection: 'row', backgroundColor: 'unset' }}
                         >
-                          <img className="img-radius" src={data.image} alt="Generic placeholder" />
+                          <FontAwesomeIcon icon={faUser} className="img-radius" />
                           <Card.Body className="p-0">
                             <p>
                               <strong>{data.name}</strong>
@@ -122,51 +210,31 @@ const NavRight = () => {
           </Dropdown>
         </ListGroup.Item>
         <ListGroup.Item as="li" bsPrefix=" ">
-          <Dropdown>
-            <Dropdown.Toggle as={Link} variant="link" to="#" className="displayChatbox" onClick={() => setListOpen(true)}>
-              <i className="icon feather icon-mail" />
-              <span className="badge bg-success">
-                <span />
-              </span>
-            </Dropdown.Toggle>
-          </Dropdown>
-        </ListGroup.Item>
-        <ListGroup.Item as="li" bsPrefix=" ">
           <Dropdown align="end" className="drp-user">
             <Dropdown.Toggle as={Link} variant="link" to="#" id="dropdown-basic">
-              <img src={avatar1} className="img-radius wid-40" alt="User Profile" />
+              <FontAwesomeIcon icon={faUser} className="img-radius wid-40" />
             </Dropdown.Toggle>
             <Dropdown.Menu align="end" className="profile-notification">
               <div className="pro-head">
-                <img src={avatar1} className="img-radius" alt="User Profile" />
-                <span>John Doe</span>
+              <FontAwesomeIcon icon={faUser} className="img-radius" />
+              <span>{userData.name || 'Loading...'}</span> {/* Aquí mostramos el nombre del usuario */}
                 <Link to="#" className="dud-logout" title="Logout">
                   <i className="feather icon-log-out" />
                 </Link>
               </div>
               <ListGroup as="ul" bsPrefix=" " variant="flush" className="pro-body">
                 <ListGroup.Item as="li" bsPrefix=" ">
-                  <Link to="#" className="dropdown-item">
+                  <Dropdown.Item onClick={toggleSettingsModal}>
                     <i className="feather icon-settings" /> Settings
-                  </Link>
+                  </Dropdown.Item>
                 </ListGroup.Item>
                 <ListGroup.Item as="li" bsPrefix=" ">
-                  <Link to="#" className="dropdown-item">
+                   <Dropdown.Item onClick={redirectToProfile}>
                     <i className="feather icon-user" /> Profile
-                  </Link>
+                  </Dropdown.Item>
                 </ListGroup.Item>
                 <ListGroup.Item as="li" bsPrefix=" ">
-                  <Link to="#" className="dropdown-item">
-                    <i className="feather icon-mail" /> My Messages
-                  </Link>
-                </ListGroup.Item>
-                <ListGroup.Item as="li" bsPrefix=" ">
-                  <Link to="#" className="dropdown-item">
-                    <i className="feather icon-lock" /> Lock Screen
-                  </Link>
-                </ListGroup.Item>
-                <ListGroup.Item as="li" bsPrefix=" ">
-                  <Link to="#" className="dropdown-item">
+                <Link to="#" className="dropdown-item" onClick={handleLogout}>
                     <i className="feather icon-log-out" /> Logout
                   </Link>
                 </ListGroup.Item>
@@ -175,7 +243,43 @@ const NavRight = () => {
           </Dropdown>
         </ListGroup.Item>
       </ListGroup>
-      <ChatList listOpen={listOpen} closed={() => setListOpen(false)} />
+
+            {/* Modal de Configuraciones */}
+      <Modal show={showSettings} onHide={toggleSettingsModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>User Settings</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Check
+              type="checkbox"
+              label="Translate To English"
+              name="translate"
+              checked={settings.translate}
+              onChange={handleSettingsChange}
+            />
+            <Form.Check
+              type="checkbox"
+              label="Dark Mode"
+              name="darkMode"
+              checked={settings.darkMode}
+              onChange={handleSettingsChange}
+            />
+            <Form.Check
+              type="checkbox"
+              label="Public Profile"
+              name="publicProfile"
+              checked={settings.publicProfile}
+              onChange={handleSettingsChange}
+            />
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={toggleSettingsModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </React.Fragment>
   );
 };
