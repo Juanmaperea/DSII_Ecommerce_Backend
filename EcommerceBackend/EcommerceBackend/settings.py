@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -58,6 +59,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# CORS settings
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # 👈 Permitir frontend local
+]
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'# 👈 Permitir frontend local
 
 ROOT_URLCONF = 'EcommerceBackend.urls'
 
@@ -147,3 +155,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 AUTH_USER_MODEL = 'users.Usuario'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'ecommerceprojectds1@gmail.com'
+EMAIL_HOST_PASSWORD = 'tvqexgfnozvgpxju'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
