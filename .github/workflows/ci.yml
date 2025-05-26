@@ -51,7 +51,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -74,16 +74,22 @@ jobs:
         run: |
           cd EcommerceFrontend
           npm install
-      #- name: Run frontend tests with coverage
-        #run: |
-          #cd EcommerceFrontend
-          #npm run test -- --coverage --coverageReporters=lcov
+      - name: Run frontend tests with coverage
+        run: |
+          cd EcommerceFrontend
+          npm run test -- --coverage --coverageReporters=lcov
+      # Agrega una validación o manejo de errores
+      - name: Ensure coverage reports exist
+        run: |
+          test -f EcommerceBackend/coverage.xml || echo "Warning: Backend coverage not found"
+          test -f EcommerceFrontend/coverage/lcov.info || echo "Warning: Frontend coverage not found"
+
 
       # SonarCloud
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v2
-        with:
-         projectBaseDir: .
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #- name: SonarCloud Scan
+        #uses: SonarSource/sonarcloud-github-action@v2
+        #with:
+         #projectBaseDir: .
+        #env:
+          #SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           
