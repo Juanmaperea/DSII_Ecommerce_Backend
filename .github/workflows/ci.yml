@@ -69,10 +69,6 @@ jobs:
         run: |
           cd EcommerceBackend
           pytest --reuse-db --cov=EcommerceBackend --cov-report=xml
-          coverage report
-      - name: Fix coverage.xml paths
-        run: |
-          sed -i "s|/home/runner/work/DSII_Ecommerce/DSII_Ecommerce/||g" EcommerceBackend/coverage.xml
       # Frontend - React + Vite + Jest
       - name: Install frontend dependencies
         run: |
