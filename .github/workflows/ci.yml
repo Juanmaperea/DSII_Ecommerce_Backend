@@ -74,7 +74,7 @@ jobs:
       - name: Fix paths in coverage.xml
         run: |
           cd EcommerceBackend
-          sed -i 's|C:\\\\Users\\\\[^<]*\\\\DSII_Ecommerce\\\\EcommerceBackend||g' coverage.xml
+          sed -i "s|/home/runner/work/DSII_Ecommerce/DSII_Ecommerce/||g" coverage.xml
       # Frontend - React + Vite + Jest
       - name: Install frontend dependencies
         run: |
@@ -84,10 +84,6 @@ jobs:
         run: |
           cd EcommerceFrontend
           npm run test -- --coverage --coverageReporters=lcov
-      - name: Fix paths in lcov.info
-        run: |
-          cd EcommerceFrontend
-          sed -i 's|SF:src/|SF:EcommerceFrontend/src/|g' coverage/lcov.info
       # Agrega una validación o manejo de errores
       - name: Ensure coverage reports exist
         run: |
