@@ -68,7 +68,7 @@ jobs:
       - name: Run Django tests with coverage
         run: |
           cd EcommerceBackend
-          pytest --reuse-db --cov=EcommerceBackend --cov-report=xml:coverage.xml
+          pytest --reuse-db --cov=EcommerceBackend --cov-report=xml
       # Frontend - React + Vite + Jest
       - name: Install frontend dependencies
         run: |
@@ -83,12 +83,6 @@ jobs:
         run: |
           test -f EcommerceBackend/coverage.xml || echo "Warning: Backend coverage not found"
           test -f EcommerceFrontend/coverage/lcov.info || echo "Warning: Frontend coverage not found"
-      
-      # Verifica el contenido de coverage.xml:
-      - name: Debug coverage.xml path issues
-        run: |
-          echo "Contents of EcommerceBackend/coverage.xml:"
-          head EcommerceBackend/coverage.xml
 
       # SonarCloud
       - name: SonarCloud Scan
