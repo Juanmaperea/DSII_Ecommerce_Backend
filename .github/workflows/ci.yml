@@ -87,13 +87,11 @@ jobs:
         run: |
           test -f EcommerceBackend/coverage.xml || echo "Warning: Backend coverage not found"
           test -f EcommerceFrontend/coverage/lcov.info || echo "Warning: Frontend coverage not found"
-
-
-      # SonarCloud
-      #- name: SonarCloud Scan
-        #uses: SonarSource/sonarcloud-github-action@v2
-        #with:
-         #projectBaseDir: .
-        #env:
-          #SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+       #SonarCloud
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          projectBaseDir: .
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           
