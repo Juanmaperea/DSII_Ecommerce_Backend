@@ -68,8 +68,7 @@ jobs:
       - name: Run Django tests with coverage
         run: |
           cd EcommerceBackend
-          coverage run --source=EcommerceBackend manage.py test
-          coverage xml -o coverage.xml
+          pytest --reuse-db --cov=EcommerceBackend --cov-report=xml:coverage.xml
       # Frontend - React + Vite + Jest
       - name: Install frontend dependencies
         run: |
