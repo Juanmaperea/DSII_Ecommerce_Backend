@@ -70,6 +70,7 @@ jobs:
           cd EcommerceBackend
           coverage run --source=EcommerceBackend manage.py test
           coverage xml -o coverage.xml
+          coverage report
       # Frontend - React + Vite + Jest
       - name: Install frontend dependencies
         run: |
@@ -90,6 +91,11 @@ jobs:
         run: |
           echo "Contents of EcommerceBackend/coverage.xml:"
           head EcommerceBackend/coverage.xml
+      
+      # Paso para inspeccionar lo que contiene el coverage.xml:
+      - name: Show contents of coverage.xml
+        run: |
+          head -n 20 EcommerceBackend/coverage.xml
 
       # SonarCloud
       - name: SonarCloud Scan
