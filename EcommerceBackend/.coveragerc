@@ -1,0 +1,22 @@
+[run]
+source = .
+omit = 
+    */migrations/*
+    */venv/*
+    */env/*
+    */tests/*
+    */__pycache__/*
+    manage.py
+    */settings/*
+    */wsgi.py
+    */asgi.py
+
+[xml]
+output = coverage.xml
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    raise AssertionError
+    raise NotImplementedError
