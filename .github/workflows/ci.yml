@@ -70,11 +70,9 @@ jobs:
           cd EcommerceBackend
           coverage run --source=EcommerceBackend manage.py test
           coverage xml -o coverage.xml
-          coverage report
-      - name: Fix paths in coverage.xml
+      - name: Fix coverage.xml paths
         run: |
-          cd EcommerceBackend
-          sed -i "s|/home/runner/work/DSII_Ecommerce/DSII_Ecommerce/||g" coverage.xml
+          sed -i "s|/home/runner/work/DSII_Ecommerce/DSII_Ecommerce/||g" EcommerceBackend/coverage.xml
       # Frontend - React + Vite + Jest
       - name: Install frontend dependencies
         run: |
