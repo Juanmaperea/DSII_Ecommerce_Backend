@@ -67,22 +67,10 @@ jobs:
           pip install pytest pytest-django coverage
 
       - name: Run Django tests with coverage
-        working-directory: ./EcommerceBackend
-        run: |
-          coverage run --source='.' -m pytest --reuse-db
-          coverage xml --omit="*/migrations/*,*/venv/*,*/env/*,*/tests/*"
-
-      # Generate coverage from project root
-      - name: Generate backend coverage from root
         run: |
           cd EcommerceBackend
-          # Run coverage with relative paths from project root
-          python -m coverage run --source=EcommerceBackend -m pytest --reuse-db
-          python -m coverage xml -o coverage.xml
-          
-          # Verify the paths
-          echo "Generated coverage.xml:"
-          head -20 coverage.xml
+          coverage run --source='.' -m pytest --reuse-db
+          coverage xml --omit="*/migrations/*,*/venv/*,*/env/*,*/tests/*"
 
       # Fix coverage.xml paths to be relative
       - name: Fix backend coverage paths
