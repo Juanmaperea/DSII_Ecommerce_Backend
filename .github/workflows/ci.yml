@@ -82,7 +82,7 @@ jobs:
         run: |
           cd EcommerceFrontend
           npm run test -- --coverage --coverageReporters=lcov
-
+          
       # SonarCloud
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
