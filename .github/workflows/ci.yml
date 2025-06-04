@@ -67,23 +67,59 @@ jobs:
           pip install pytest pytest-django coverage
 
       - name: Run Django tests with coverage
+        working-directory: ./EcommerceBackend
         run: |
-          pytest EcommerceBackend/ --reuse-db --cov=EcommerceBackend --cov-report=EcommerceBackend/coverage.xml
+          coverage run --source='.' -m pytest --reuse-db
+          coverage xml --omit="*/migrations/*,*/venv/*,*/env/*,*/tests/*"
+
+      # Generate coverage from project root
+      - name: Generate backend coverage from root
+        run: |
+          cd EcommerceBackend
+          # Run coverage with relative paths from project root
+          python -m coverage run --source=EcommerceBackend -m pytest --reuse-db
+          python -m coverage xml -o coverage.xml
+          
+          # Verify the paths
+          echo "Generated coverage.xml:"
+          head -20 coverage.xml
+
+      # Fix coverage.xml paths to be relative
+      - name: Fix backend coverage paths
+        run: |
+          cd EcommerceBackend
+          sed -i 's|<source>/home/runner/work/DSII_Ecommerce/DSII_Ecommerce/EcommerceBackend</source>|<source>.</source>|g' coverage.xml
+          sed -i 's|filename="/home/runner/work/DSII_Ecommerce/DSII_Ecommerce/EcommerceBackend/|filename="|g' coverage.xml
+
       # Frontend - React + Vite + Jest
       - name: Install frontend dependencies
         run: |
           cd EcommerceFrontend
           npm install
+
       - name: Run frontend tests with coverage
         run: |
           cd EcommerceFrontend
-          npm run test -- --coverage --coverageReporters=lcov
-      # Agrega una validación o manejo de errores
-      - name: Ensure coverage reports exist
-        run: |
-          test -f EcommerceBackend/coverage.xml || echo "Warning: Backend coverage not found"
-          test -f EcommerceFrontend/coverage/lcov.info || echo "Warning: Frontend coverage not found"
+          npm run test -- --coverage --coverageReporters=lcov --passWithNoTests
 
+      # Verify coverage reports exist
+      - name: Verify coverage reports
+        run: |
+          echo "Checking backend coverage..."
+          if [ -f "EcommerceBackend/coverage.xml" ]; then
+            echo "✓ Backend coverage.xml found"
+            head -20 EcommerceBackend/coverage.xml
+          else
+            echo "✗ Backend coverage.xml not found"
+          fi
+          
+          echo "Checking frontend coverage..."
+          if [ -f "EcommerceFrontend/coverage/lcov.info" ]; then
+            echo "✓ Frontend lcov.info found"
+            head -10 EcommerceFrontend/coverage/lcov.info
+          else
+            echo "✗ Frontend lcov.info not found"
+          fi
 
       # SonarCloud
       - name: SonarCloud Scan
@@ -92,4 +128,3 @@ jobs:
           projectBaseDir: .
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          
