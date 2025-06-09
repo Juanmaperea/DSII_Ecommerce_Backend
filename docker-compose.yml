@@ -1,0 +1,43 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: ecommerce_db
+      POSTGRES_USER: ecommerce_user
+      POSTGRES_PASSWORD: ecommerce_pass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./EcommerceBackend
+    container_name: django_backend
+    command: gunicorn EcommerceBackend.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - ./EcommerceBackend:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DB_NAME=ecommerce_db
+      - DB_USER=ecommerce_user
+      - PASSWORD=ecommerce_pass
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+
+  frontend:
+    build: ./EcommerceFrontend
+    container_name: vite_frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
