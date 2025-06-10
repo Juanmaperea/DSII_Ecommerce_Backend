@@ -52,3 +52,26 @@ class TestAPIViews:
         assert resp.status_code in (301, 302)
         user.refresh_from_db()
         assert user.is_active
+
+    def test_login_active_and_inactive(self):
+        rol = Rol.objects.create(nombre='Cliente', descripcion='Desc')
+        user = User.objects.create_user(
+            username='loginuser',
+            email='log@example.com',
+            password='loginpass',
+            cedula='999888777',
+            direccion='Calle 1',
+            telefono='3000001111',
+            rol=rol,
+            is_active=False
+        )
+        url = reverse('login_view')
+        # attempt inactive
+        resp = self.client.post(url, {'username': 'loginuser', 'password': 'loginpass'}, format='json')
+        assert resp.status_code == 401
+        # activate
+        user.is_active = True
+        user.save()
+        resp2 = self.client.post(url, {'username': 'loginuser', 'password': 'loginpass'}, format='json')
+        assert resp2.status_code == 200
+        assert 'tokens' in resp2.data
