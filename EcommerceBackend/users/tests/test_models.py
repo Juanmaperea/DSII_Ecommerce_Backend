@@ -1,4 +1,8 @@
-import pytest
+import pytest 
+
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
 from django.test import TestCase
@@ -25,5 +29,18 @@ class TestRolModel:
 
     def test_metodopago_str(self):
         metodo = MetodoPago.objects.create(tipo_pago="Tarjeta de Crédito")
-        assert str(metodo) == "Tarjeta de Crédito"
+        assert str(metodo) == "Tarjeta de Crédito" 
+
+    def test_usuario_str_includes_username_and_rol(self):
+        rol = Rol.objects.create(nombre="Cliente", descripcion="Usuario comprador")
+        user = User.objects.create_user(
+            username="juanpablo",
+            password="pass1234",
+            cedula="1234567890",
+            direccion="Calle Falsa 123",
+            telefono="3001234567",
+            rol=rol
+        )
+        expected = f"{user.username} - {rol.nombre}"
+        assert str(user) == expected
         
