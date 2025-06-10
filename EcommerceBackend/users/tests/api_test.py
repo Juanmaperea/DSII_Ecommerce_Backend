@@ -74,4 +74,29 @@ class TestAPIViews:
         user.save()
         resp2 = self.client.post(url, {'username': 'loginuser', 'password': 'loginpass'}, format='json')
         assert resp2.status_code == 200
-        assert 'tokens' in resp2.data
+        assert 'tokens' in resp2.data 
+        
+    def test_change_password(self):
+        rol = Rol.objects.create(nombre='Cliente', descripcion='Desc')
+        user = User.objects.create_user(
+            username='changepass',
+            password='oldpass',
+            cedula='555444333',
+            direccion='Dir',
+            telefono='3002223333',
+            rol=rol,
+            is_active=True
+        )
+        url = reverse('change_password_view')
+        # wrong current
+        self.client.force_authenticate(user=user)
+        resp = self.client.post(url, {'username': 'changepass', 'current_password': 'bad', 'new_password': 'newpass'})
+        assert resp.status_code == 401
+        # same password
+        resp2 = self.client.post(url, {'username': 'changepass', 'current_password': 'oldpass', 'new_password': 'oldpass'})
+        assert resp2.status_code == 400
+        # correct change
+        resp3 = self.client.post(url, {'username': 'changepass', 'current_password': 'oldpass', 'new_password': 'newpass'})
+        assert resp3.status_code == 200
+        user.refresh_from_db()
+        assert user.check_password('newpass')
