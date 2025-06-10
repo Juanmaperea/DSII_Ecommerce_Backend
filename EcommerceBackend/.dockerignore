@@ -1,0 +1,70 @@
+# Exclude sensitive files
+.env
+.env.*
+*.env
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git
+.mypy_cache
+.pytest_cache
+.hypothesis
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Local development files
+db.sqlite3
+*.sqlite3
+media/
+
+# Documentation
+*.md
+README*
+docs/
+
+# Test files (already run during build)
+tests/
+test_*.py
+*_test.py
+
+# Development dependencies
+Pipfile
+Pipfile.lock
+requirements-dev.txt
+
+# Version control
+.git/
+.gitignore
+
+# Local configuration
+local_settings.py
+settings_local.py 
