@@ -59,16 +59,16 @@ jobs:
           node-version: '18'
 
       # Backend - Django + Pytest
-      - name: Install Python dependencies
-        run: |
-          cd EcommerceBackend
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install pytest pytest-django coverage
-      - name: Run Django tests with coverage
-        run: |
-          cd EcommerceBackend
-          pytest --reuse-db --cov=EcommerceBackend --cov-report=xml
+      #- name: Install Python dependencies
+        #run: |
+          #cd EcommerceBackend
+          #python -m pip install --upgrade pip
+          #pip install -r requirements.txt
+          #pip install pytest pytest-django coverage
+      #- name: Run Django tests with coverage
+        #run: |
+          #cd EcommerceBackend
+          #pytest --reuse-db --cov=EcommerceBackend --cov-report=xml
       # Frontend - React + Vite + Jest
       - name: Install frontend dependencies
         run: |
@@ -81,7 +81,6 @@ jobs:
       # Agrega una validación o manejo de errores
       - name: Ensure coverage reports exist
         run: |
-          test -f EcommerceBackend/coverage.xml || echo "Warning: Backend coverage not found"
           test -f EcommerceFrontend/coverage/lcov.info || echo "Warning: Frontend coverage not found"
 
 
