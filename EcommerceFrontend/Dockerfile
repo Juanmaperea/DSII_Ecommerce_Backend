@@ -10,8 +10,12 @@ COPY package*.json ./
 # Instalar dependencias sin ejecutar scripts (más seguro)
 RUN npm install --ignore-scripts
 
-# Copiar el resto del código fuente
-COPY . .
+# Copiar solo los archivos y carpetas necesarios
+COPY src ./src
+COPY public ./public
+COPY vite.config.* ./
+COPY tsconfig.* ./
+# ...agrega aquí otros archivos de configuración necesarios...
 
 # Construir la aplicación para producción
 RUN npm run build
