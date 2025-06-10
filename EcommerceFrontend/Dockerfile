@@ -13,9 +13,6 @@ RUN npm install --ignore-scripts
 # Copiar solo los archivos y carpetas necesarios
 COPY src ./src
 COPY public ./public
-COPY vite.config.* ./
-COPY tsconfig.* ./
-# ...agrega aquí otros archivos de configuración necesarios...
 
 # Construir la aplicación para producción
 RUN npm run build
