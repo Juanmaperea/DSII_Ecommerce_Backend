@@ -196,5 +196,72 @@ describe('Login Component', () => {
     });
   });
 
+// Grupo de tests: Funcionalidad de Registro
+  describe('Funcionalidad de Registro', () => {
+    it('permite registrar un nuevo usuario correctamente', async () => {
+      // Simula una respuesta exitosa de registro
+      axiosInstance.post.mockResolvedValueOnce({
+        status: 201,
+        data: {
+          message: 'Usuario creado exitosamente'
+        }
+      });
+
+      renderWithRouter(<Login />);
+      fireEvent.click(screen.getByText('Sign up'));
+
+      const username = 'testuser_new';
+      fillRegisterForm(username);
+      fireEvent.click(screen.getByRole('button', { name: 'Sign up' }));
+
+      await waitFor(() => {
+        expect(screen.getByText(/Registro exitoso/i)).toBeInTheDocument();
+      });
+
+      expect(axiosInstance.post).toHaveBeenCalledWith('/users/signup/', {
+        username: 'testuser_new',
+        password1: 'password123',
+        password2: 'password123',
+        email: 'testuser_new@mail.com',
+        first_name: 'Test',
+        last_name: 'User',
+        cedula: '123456789',
+        direccion: 'Calle 123',
+        telefono: '5551234567',
+        rol: {
+          nombre: 'Comprador'
+        },
+        groups: [2]
+      });
+
+      await waitFor(() => {
+        expect(screen.getByPlaceholderText('Username')).toBeInTheDocument();
+        expect(screen.queryByPlaceholderText('Email')).not.toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent('Sign in');
+      });
+    });
+
+    it('muestra error cuando el registro falla', async () => {
+      // Simula una respuesta de error en el registro
+      axiosInstance.post.mockRejectedValueOnce({
+        response: {
+          data: {
+            message: 'El usuario ya existe'
+          }
+        }
+      });
+
+      renderWithRouter(<Login />);
+      fireEvent.click(screen.getByText('Sign up'));
+
+      fillRegisterForm('usuario_existente');
+      fireEvent.click(screen.getByRole('button', { name: 'Sign up' }));
+
+      await waitFor(() => {
+        expect(screen.getByText('El usuario ya existe')).toBeInTheDocument();
+      });
+    });
+  });
+
 });
 
