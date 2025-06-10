@@ -75,3 +75,25 @@ class TestAPIViews:
         resp2 = self.client.post(url, {'username': 'loginuser', 'password': 'loginpass'}, format='json')
         assert resp2.status_code == 200
         assert 'tokens' in resp2.data
+   
+    def test_logout_and_refresh(self):
+        rol = Rol.objects.create(nombre='Cliente', descripcion='Desc')
+        user = User.objects.create_user(
+            username='tokenuser',
+            password='tokpass',
+            cedula='222333444',
+            direccion='Dir',
+            telefono='3003334444',
+            rol=rol,
+            is_active=True
+        )
+        login_url = reverse('login_view')
+        login_resp = self.client.post(login_url, {'username':'tokenuser', 'password':'tokpass'}, format='json')
+        refresh = login_resp.data['tokens']['refresh']
+        logout_url = reverse('logout_view')
+        self.client.force_authenticate(user=user)
+        resp = self.client.post(logout_url, {'refresh': refresh}, format='json')
+        assert resp.status_code == 200
+        refresh_url = reverse('refresh_token_view')
+        resp2 = self.client.post(refresh_url, {'refresh': refresh}, format='json')
+        assert resp2.status_code==400
