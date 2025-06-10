@@ -199,12 +199,14 @@ const Login = () => {
 
                   <p className="mb-2">
                     {isRegister ? 'Already have an account?' : 'Don’t have an account?'}{' '}
-                    <span
+                    <button
+                      type="button"
                       onClick={handleSwitch}
-                      style={{ cursor: 'pointer', color: 'blue' }}
+                      style={{ cursor: 'pointer', color: 'blue', background: 'none', border: 'none', padding: 0 }}
                     >
                       {isRegister ? 'Sign in' : 'Sign up'}
-                    </span>
+                    </button>
+
                   </p>
 
                   {message && <p className="text-success">{message}</p>}

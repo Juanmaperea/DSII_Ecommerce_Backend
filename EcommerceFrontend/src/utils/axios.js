@@ -22,7 +22,7 @@ const axiosInstance = axios.create({
       return config;
     },
     (error) => {
-      return Promise.reject(error);
+      return Promise.reject(error instanceof Error ? error : new Error(JSON.stringify(error)));
     }
   );
   
@@ -47,7 +47,7 @@ const axiosInstance = axios.create({
           // Optionally redirect to login or handle session expiration
         }
       }
-      return Promise.reject(error);
+      return Promise.reject(error instanceof Error ? error : new Error(JSON.stringify(error)));
     }
   );
  

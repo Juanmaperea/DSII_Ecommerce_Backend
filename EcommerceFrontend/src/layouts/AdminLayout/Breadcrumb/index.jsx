@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types'; 
 import { Link, useLocation } from 'react-router-dom';
 import { ListGroup } from 'react-bootstrap';
 import { BASE_TITLE } from '../../../config/constant';
@@ -82,6 +83,21 @@ const Breadcrumb = ({ menuItems }) => {
   }, [item]);
 
   return <React.Fragment>{renderBreadcrumbContent()}</React.Fragment>;
+};
+
+
+Breadcrumb.propTypes = {
+  menuItems: PropTypes.shape({
+    items: PropTypes.arrayOf(
+      PropTypes.shape({
+        type: PropTypes.string.isRequired,
+        title: PropTypes.string,
+        url: PropTypes.string,
+        breadcrumbs: PropTypes.bool,
+        children: PropTypes.array, // se puede mejorar si quieres validar el contenido
+      })
+    ),
+  }).isRequired,
 };
 
 export default Breadcrumb;
