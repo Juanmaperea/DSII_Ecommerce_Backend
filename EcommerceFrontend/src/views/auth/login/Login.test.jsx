@@ -124,4 +124,77 @@ describe('Login Component', () => {
       expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent('Sign in');
     });
   });
+
+  // Grupo de tests: Funcionalidad de Login
+  describe('Funcionalidad de Login', () => {
+    it('permite iniciar sesión con credenciales válidas', async () => {
+      // Simula una respuesta exitosa de login
+      axiosInstance.post.mockResolvedValueOnce({
+        status: 200,
+        data: {
+          tokens: {
+            access: 'fake-access-token',
+            refresh: 'fake-refresh-token'
+          }
+        }
+      });
+
+      renderWithRouter(<Login />);
+      fillLoginForm();
+      fireEvent.click(screen.getByRole('button', { name: 'Sign in' }));
+
+      await waitFor(() => {
+        expect(screen.getByText(/Bienvenido, usuario_existente/i)).toBeInTheDocument();
+      });
+
+      expect(axiosInstance.post).toHaveBeenCalledWith('users/login/', {
+        username: 'usuario_existente',
+        password: 'contraseña_correcta'
+      });
+
+      expect(localStorage.getItem('accessToken')).toBe('fake-access-token');
+      expect(localStorage.getItem('refreshToken')).toBe('fake-refresh-token');
+      expect(mockNavigate).toHaveBeenCalledWith('/productos');
+    });
+
+    it('muestra error cuando el login falla', async () => {
+      // Simula una respuesta de error
+      axiosInstance.post.mockRejectedValueOnce({
+        response: {
+          data: {
+            message: 'Credenciales inválidas'
+          }
+        }
+      });
+
+      renderWithRouter(<Login />);
+      fillLoginForm('usuario_malo', 'contraseña_mala');
+      fireEvent.click(screen.getByRole('button', { name: 'Sign in' }));
+
+      await waitFor(() => {
+        expect(screen.getByText('Credenciales inválidas')).toBeInTheDocument();
+      });
+
+      expect(localStorage.getItem('accessToken')).toBeNull();
+      expect(localStorage.getItem('refreshToken')).toBeNull();
+      expect(mockNavigate).not.toHaveBeenCalled();
+    });
+
+    it('maneja errores sin mensaje específico', async () => {
+      // Simula un error sin mensaje específico
+      axiosInstance.post.mockRejectedValueOnce({
+        response: null
+      });
+
+      renderWithRouter(<Login />);
+      fillLoginForm();
+      fireEvent.click(screen.getByRole('button', { name: 'Sign in' }));
+
+      await waitFor(() => {
+        expect(screen.getByText('Error en la operación.')).toBeInTheDocument();
+      });
+    });
+  });
+
 });
+
