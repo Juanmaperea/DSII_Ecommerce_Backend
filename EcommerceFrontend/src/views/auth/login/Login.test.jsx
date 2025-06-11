@@ -263,5 +263,50 @@ describe('Login Component', () => {
     });
   });
 
+
+  // Grupo de tests: Validación de formularios
+  describe('Validación de formularios', () => {
+    it('permite llenar todos los campos del registro', () => {
+      renderWithRouter(<Login />);
+      fireEvent.click(screen.getByText('Sign up'));
+
+      fillRegisterForm('testuser');
+
+      expect(screen.getByDisplayValue('testuser')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('testuser@mail.com')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('123456789')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('Calle 123')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('5551234567')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('Test')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('User')).toBeInTheDocument();
+    });
+
+    it('limpia el mensaje cuando cambia entre formularios', async () => {
+      renderWithRouter(<Login />);
+      axiosInstance.post.mockRejectedValueOnce({
+        response: {
+          data: { message: 'Error de prueba' }
+        }
+      });
+
+      fillLoginForm();
+      fireEvent.click(screen.getByRole('button', { name: 'Sign in' }));
+
+      await waitFor(() => {
+        expect(screen.getByText('Error de prueba')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByText('Sign up'));
+      await waitFor(() => {
+        expect(screen.queryByText('Error de prueba')).not.toBeInTheDocument();
+      });
+
+      expect(screen.getByRole('button', { name: 'Sign up' })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent('Sign up');
+    });
+  });
+
 });
+
+
 

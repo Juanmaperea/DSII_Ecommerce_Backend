@@ -2,7 +2,7 @@ import pytest
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-from users.models import Rol, Usuario
+from users.models import Rol, Usuario, MetodoPago
 
 
 @pytest.mark.django_db
@@ -22,4 +22,8 @@ class TestRolModel:
         assert rol.nombre == "Administrador"
         assert rol.descripcion == "Usuario con permisos administrativos completos"
         assert str(rol) == "Administrador"
+
+    def test_metodopago_str(self):
+        metodo = MetodoPago.objects.create(tipo_pago="Tarjeta de Crédito")
+        assert str(metodo) == "Tarjeta de Crédito"
         
