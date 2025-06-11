@@ -48,7 +48,7 @@ class TestRolModel:
         )
         expected = f"{user.username} - {rol.nombre}"
         assert str(user) == expected
-        
+
     def test_unique_cedula_constraint(self):
         rol = Rol.objects.create(nombre="Cliente", descripcion="Usuario comprador")
         # crear primer usuario
@@ -68,3 +68,25 @@ class TestRolModel:
                 direccion="Dirección 2",
                 telefono="3000000000",
                 rol=rol)
+            
+    def test_usuario_rol_null(self):
+        user = User.objects.create_user(
+            username="sinrol",
+            password="pass1234",
+            cedula="1112223334",
+            direccion="Sin dirección",
+            telefono="3001112222",
+            rol=None
+        )
+        assert user.rol is None
+
+    def test_rol_nombre_max_length(self):
+        long_name = "A" * 51
+        with pytest.raises(Exception):
+            Rol.objects.create(nombre=long_name, descripcion="Muy largo")
+
+    def test_metodopago_str_repr(self):
+        metodo = MetodoPago.objects.create(tipo_pago="Efectivo")
+        assert str(metodo) == "Efectivo"
+
+        

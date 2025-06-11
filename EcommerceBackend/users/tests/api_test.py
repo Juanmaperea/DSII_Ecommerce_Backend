@@ -123,3 +123,34 @@ class TestAPIViews:
         refresh_url = reverse('refresh_token_view')
         resp2 = self.client.post(refresh_url, {'refresh': refresh}, format='json')
         assert resp2.status_code==400
+
+    def test_login_missing_fields(self):
+        url = reverse('login_view')
+        resp = self.client.post(url, {'username': 'useronly'}, format='json')
+        assert resp.status_code == 400
+        assert 'message' in resp.data
+
+    def test_signup_passwords_do_not_match(self):
+        url = reverse('signup_view')
+        data = {
+            'username': 'nouser',
+            'email': 'nouser@example.com',
+            'first_name': 'No',
+            'last_name': 'User',
+            'cedula': '123123123',
+            'password1': 'abc123',
+            'password2': 'different',
+            'direccion': 'Calle 1',
+            'telefono': '3000000000',
+            'rol': {'nombre': 'Cliente'},
+            'groups': []
+        }
+        resp = self.client.post(url, data, format='json')
+        assert resp.status_code == 400
+        assert 'contraseñas no coinciden' in resp.data['message'].lower()
+
+    def test_email_api_missing_fields(self):
+        url = reverse('email_view')
+        resp = self.client.post(url, {'subject': 'Hola'}, format='json')
+        assert resp.status_code == 400
+        assert 'obligatorios' in resp.data['message'].lower()
