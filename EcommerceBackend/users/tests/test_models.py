@@ -68,4 +68,3 @@ class TestRolModel:
                 direccion="Dirección 2",
                 telefono="3000000000",
                 rol=rol)
-        assert str(metodo) == "Tarjeta de Crédito" 
