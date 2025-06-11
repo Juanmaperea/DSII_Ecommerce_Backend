@@ -306,6 +306,32 @@ describe('Login Component', () => {
     });
   });
 
+// Grupo de tests: Elementos de interfaz
+  describe('Elementos de interfaz', () => {
+    it('muestra la imagen del logo', () => {
+      renderWithRouter(<Login />);
+      const logo = screen.getByAltText('Logo');
+      expect(logo).toBeInTheDocument();
+      expect(logo).toHaveClass('img-fluid', 'mb-4');
+    });
+
+    it('muestra los enlaces de navegación correctos', () => {
+      renderWithRouter(<Login />);
+      expect(screen.getByText('Sign up')).toBeInTheDocument();
+      fireEvent.click(screen.getByText('Sign up'));
+      expect(screen.getByText('Sign in')).toBeInTheDocument();
+    });
+
+    it('aplica los estilos correctos al enlace de cambio', () => {
+      renderWithRouter(<Login />);
+      const signUpLink = screen.getByText('Sign up');
+      expect(signUpLink).toHaveStyle({
+        cursor: 'pointer',
+        color: 'blue'
+      });
+    });
+  });
+
 });
 
 
