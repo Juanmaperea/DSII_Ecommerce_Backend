@@ -62,14 +62,14 @@ const Login = () => {
         });
         console.log('Respuesta completa del backend:', response.data);
         const {access, refresh} = response.data.tokens; 
-        console.log('Access Token:', access);
-        console.log('Refresh Token:', refresh);
+        //console.log('Access Token:', access);
+        //console.log('Refresh Token:', refresh);
 
         
         localStorage.setItem('accessToken', access);
         localStorage.setItem('refreshToken', refresh);
-        console.log('Access Token guardado:', localStorage.getItem('accessToken'));
-        console.log('Refresh Token guardado:', localStorage.getItem('refreshToken'));
+        //console.log('Access Token guardado:', localStorage.getItem('accessToken'));
+        //console.log('Refresh Token guardado:', localStorage.getItem('refreshToken'));
 
         setMessage(`Bienvenido, ${loginUsername}`);
         navigate('/productos');
