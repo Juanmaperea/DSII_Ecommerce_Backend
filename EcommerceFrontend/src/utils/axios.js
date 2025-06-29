@@ -15,7 +15,6 @@ const axiosInstance = axios.create({
   axiosInstance.interceptors.request.use(
     (config) => {
       const token = localStorage.getItem('accessToken'); // Get token from storage
-      console.log('Access Token desde localStorage:', token);
       if (token) {
         config.headers['Authorization'] = `Bearer ${token}`;
       }
@@ -33,7 +32,6 @@ const axiosInstance = axios.create({
       if (error.response && error.response.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
         const refreshToken = localStorage.getItem('refreshToken');
-        console.log('Refresh Token desde localStorage:', refreshToken);
         try {
           const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}users/refresh-token/`, { refresh: refreshToken });
           
