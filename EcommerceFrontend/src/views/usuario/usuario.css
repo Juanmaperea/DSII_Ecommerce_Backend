@@ -71,3 +71,20 @@ p {
 .arrow.up {
   transform: rotate(180deg);
 }
+
+.section-toggle-button {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.section-toggle-button:focus {
+  outline: 2px dashed #007bff;
+  outline-offset: 2px;
+}
