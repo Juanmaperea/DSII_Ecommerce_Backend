@@ -55,7 +55,6 @@ const UserProfile = () => {
       className="section-toggle-button"
       onClick={() => toggleSection(section)}
       onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleSection(section)}
-      role="button"
       tabIndex="0"
       type="button"
     >
@@ -77,8 +76,9 @@ const UserProfile = () => {
           <>
             <form>
               <div className="mb-3">
+                {/* ✅ CORREGIDO: Se añadió {" "} para espaciar correctamente */}
                 <label>
-                  Nombre:
+                  Nombre:{" "}
                   <input
                     type="text"
                     name="name"
@@ -90,8 +90,9 @@ const UserProfile = () => {
                 </label>
               </div>
               <div className="mb-3">
+                {/* ✅ CORREGIDO: Se añadió {" "} para espaciar correctamente */}
                 <label>
-                  Correo Electrónico:
+                  Correo Electrónico:{" "}
                   <input
                     type="email"
                     name="email"
@@ -127,7 +128,7 @@ const UserProfile = () => {
             {cards.map((card, index) => (
               <div key={card.id} className="mb-3">
                 <label>
-                  Número de tarjeta:
+                  Número de tarjeta:{" "}
                   <input
                     type="text"
                     value={card.number}
