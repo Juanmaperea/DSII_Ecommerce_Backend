@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import axiosInstance from '../utils/axios';
 
@@ -34,8 +34,14 @@ export const CategoryProvider = ({ children }) => {
     fetchCategories();
   }, []);
 
+  // Memoizar el valor del contexto para evitar re-renders innecesarios
+  const contextValue = useMemo(() => ({
+    categories,
+    createCategory
+  }), [categories]);
+
   return (
-    <CategoryContext.Provider value={{ categories, createCategory }}>
+    <CategoryContext.Provider value={contextValue}>
       {children}
     </CategoryContext.Provider>
   );
