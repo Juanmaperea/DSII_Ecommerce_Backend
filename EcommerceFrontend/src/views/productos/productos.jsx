@@ -83,7 +83,7 @@ function Productos() {
         <div className="spinner-border" role="status">
           <span className="visually-hidden">Cargando...</span>
         </div>
-        <output aria-live="polite">Cargando productos...</output>
+        <output>Cargando productos...</output>
       </div>
     );
   }
@@ -158,7 +158,7 @@ function Productos() {
       <div className="row">
         {paginatedProducts.length === 0 ? (
           <div className="col-12 text-center">
-            <output aria-live="polite">No se encontraron productos que coincidan con los filtros.</output>
+            <output>No se encontraron productos que coincidan con los filtros.</output>
           </div>
         ) : (
           paginatedProducts.map(product => (
@@ -206,7 +206,7 @@ function Productos() {
 
       {/* Modal para los detalles del producto */}
       {isModalVisible && selectedProduct && (
-        <dialog className="modal-overlay" open role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <dialog className="modal-overlay" open aria-modal="true" aria-labelledby="modal-title">
           <div className="modal-container">
             <button className="close-button" onClick={handleModalClose} aria-label="Cerrar modal">×</button>
             <img 
