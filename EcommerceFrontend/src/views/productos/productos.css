@@ -29,7 +29,9 @@
   background: none;
   border: none;
   font-size: 20px;
+  font-weight: bold;
   cursor: pointer;
+  color: black;
 }
 
 .modal-image {
