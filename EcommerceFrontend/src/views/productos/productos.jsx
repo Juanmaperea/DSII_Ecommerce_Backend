@@ -80,7 +80,7 @@ function Productos() {
   if (loading) {
     return (
       <div className="container mt-5 text-center">
-        <div className="spinner-border" role="status">
+        <div className="spinner-border">
           <span className="visually-hidden">Cargando...</span>
         </div>
         <output>Cargando productos...</output>
