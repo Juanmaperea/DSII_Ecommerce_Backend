@@ -13,17 +13,17 @@ const menuItems = {
           id: 'dashboard',
           title: 'Dashboard',
           type: 'item',
-          icon: 'feather icon-home',
+          icon: 'feather icon-trending-up',
           url: '/app/dashboard/analytics',
           roles: [1] // Solo Administrador
         },
         {
-          id: 'carrito',
-          title: 'Carrito',
+          id: 'producto',
+          title: 'Productos',
           type: 'item',
-          icon: 'feather icon-shopping-cart',
-          url: '/carrito',
-          roles: [1, 2] // Administrador y Comprador
+          icon: 'feather icon-box',
+          url: '/productos',
+          roles: [1, 2] // Solo Administrador
         },
         {
           id: 'usuario',
@@ -31,35 +31,15 @@ const menuItems = {
           type: 'item',
           icon: 'feather icon-user',
           url: '/usuario',
-          roles: [1] // Solo Administrador
-        }
-      ]
-    },
-    {
-      id: 'auth',
-      title: 'Authentication',
-      type: 'group',
-      icon: 'icon-pages',
-      children: [
-        {
-          id: 'login',
-          title: 'Login',
-          type: 'item',
-          icon: 'feather icon-log-in',
-          url: '/auth/login',
-          target: true,
-          breadcrumbs: false,
-          roles: [1, 2] // Disponible para ambos
+          roles: [1,2] // Solo Administrador
         },
         {
-          id: 'reset-pass',
-          title: 'Restablecer Contraseña',
+          id: 'ingreso',
+          title: 'Ingreso',
           type: 'item',
-          icon: 'feather icon-unlock',
-          url: '/auth/reset-password-1',
-          target: true,
-          breadcrumbs: false,
-          roles: [1, 2] // Disponible para ambos
+          icon: 'feather icon-log-in',
+          url: '/ingreso',
+          roles: [1] // Administrador y Comprador
         }
       ]
     }
