@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext  } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axiosInstance from '../../utils/axios';
 import { CategoryContext } from '../../contexts/CategoryContext';
@@ -17,12 +17,10 @@ function Productos() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-
-  const { categories, createCategory } = useContext(CategoryContext);
+  const { categories } = useContext(CategoryContext);
 
   const itemsPerPage = 6;
 
-  
   useEffect(() => {
     const fetchProductos = async () => {
       try {
@@ -45,7 +43,6 @@ function Productos() {
 
     fetchProductos();
   }, []);
-
 
   // Filtrar y ordenar los productos
   const filteredProducts = productos
@@ -108,38 +105,28 @@ function Productos() {
       <h1 className="text-center">Productos</h1>
 
       {/* Barra de búsqueda */}
-
       <div className="row justify-content-center mb-3">
-
         <div className="col-md-8">
-
           <input
-
             type="text"
-
             className="form-control text-center"
-
             placeholder="Buscar productos..."
             value={search}
             onChange={handleSearch}
           />
         </div>
-        </div>
+      </div>
 
-
-
-{/* Filtros */}
-
-<div className="row justify-content-center mb-4">
-
-  <div className="col-auto">
+      {/* Filtros */}
+      <div className="row justify-content-center mb-4">
+        <div className="col-auto">
           <select className="form-select" onChange={handleCategoryChange} value={category}>
             <option value="">Filtrar por categoría</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.nombre_categoria}
-                  </option>
-                ))}
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.nombre_categoria}
+              </option>
+            ))}
           </select>
         </div>
         <div className="col-auto">
@@ -207,7 +194,7 @@ function Productos() {
         <nav aria-label="Page navigation">
           <ul className="pagination">
             {[...Array(Math.ceil(filteredProducts.length / itemsPerPage))].map((_, index) => (
-              <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
+              <li key={`page-${index + 1}`} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
                 <button className="page-link" onClick={() => handlePageChange(index + 1)}>
                   {index + 1}
                 </button>
@@ -219,15 +206,15 @@ function Productos() {
 
       {/* Modal para los detalles del producto */}
       {isModalVisible && selectedProduct && (
-        <div className="modal-overlay">
+        <div className="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
           <div className="modal-container">
-            <button className="close-button" onClick={handleModalClose}>×</button>
+            <button className="close-button" onClick={handleModalClose} aria-label="Cerrar modal">×</button>
             <img 
               src={selectedProduct.imagen} 
               alt={selectedProduct.nombre_producto} 
               className="modal-image" 
             />
-            <h5 className="card-title">{selectedProduct.nombre_producto}</h5>
+            <h5 id="modal-title" className="card-title">{selectedProduct.nombre_producto}</h5>
             <br />
             <p><strong>Descripción:</strong> {selectedProduct.descripcion || "Sin descripción adicional"}</p>
             <p className="card-text">Precio: ${selectedProduct.precio}</p>

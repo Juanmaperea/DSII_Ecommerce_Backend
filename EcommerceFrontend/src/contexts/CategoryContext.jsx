@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import axiosInstance from '../utils/axios';
 
 // Crear el contexto
@@ -38,4 +39,9 @@ export const CategoryProvider = ({ children }) => {
       {children}
     </CategoryContext.Provider>
   );
+};
+
+// Validación de props
+CategoryProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };

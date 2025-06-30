@@ -19,7 +19,6 @@ function IngresoProducto() {
     productImage: '',
     category: '',
   });
-  const [successMessage, setSuccessMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -59,7 +58,7 @@ function IngresoProducto() {
       for (let pair of productData.entries()) {
         console.log(`${pair[0]}: ${pair[1]}`);
       }
-      const response = await axiosInstance.post('/products/api/productos/', productData, {
+      await axiosInstance.post('/products/api/productos/', productData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -188,7 +187,6 @@ function IngresoProducto() {
       <Card>
         <Card.Body>
           {renderStep()}
-          {successMessage && <div className="alert alert-success mt-3">{successMessage}</div>}
           <div className="button-group d-flex justify-content-between mt-3">
             <Button
               variant="secondary"
