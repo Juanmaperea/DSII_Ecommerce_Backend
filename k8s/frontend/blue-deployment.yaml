@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecommerce-frontend-blue
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ecommerce-frontend
+      version: blue
+  template:
+    metadata:
+      labels:
+        app: ecommerce-frontend
+        version: blue
+    spec:
+      containers:
+      - name: ecommerce-frontend
+        image: ecommerce-frontend:blue
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80

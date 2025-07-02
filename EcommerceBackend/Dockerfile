@@ -1,29 +1,18 @@
-# backend/Dockerfile
-FROM python:3.10-slim
+# Usa una imagen base de Python
+FROM python:3.11-slim
 
-# Create a non-root user
-RUN groupadd --gid 1000 appuser && \
-    useradd --uid 1000 --gid appuser --shell /bin/bash --create-home appuser
-
+# Establece el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
-# Copy and install dependencies first (for better caching)
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copia los archivos del backend al contenedor
+COPY . .
 
-# Copy only necessary application files
-COPY manage.py .
-COPY pytest.ini .
-COPY EcommerceBackend/ ./EcommerceBackend/
-COPY users/ ./users/
+# Instala las dependencias
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt
 
-# Change ownership of the app directory to the non-root user
-RUN chown -R appuser:appuser /app
+# Expone el puerto en que corre Django (por default: 8000)
+EXPOSE 8000
 
-# Switch to the non-root user
-USER appuser
-
-# Ejecuta pruebas (si falla, se detiene)
-RUN pytest --reuse-db --cov=EcommerceBackend --cov-report=xml
-
-CMD ["gunicorn", "EcommerceBackend.wsgi:application", "--bind", "0.0.0.0:8000"]
+# Comando para correr el servidor
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
