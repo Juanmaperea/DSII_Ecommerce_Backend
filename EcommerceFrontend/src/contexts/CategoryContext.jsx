@@ -31,7 +31,10 @@ export const CategoryProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchCategories();
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      fetchCategories();
+    }
   }, []);
 
   // Memoizar el valor del contexto para evitar re-renders innecesarios
